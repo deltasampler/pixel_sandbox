@@ -1,7 +1,7 @@
 import {clamp, index2, rand_in} from "@cl/math";
 import {vec3_t} from "@cl/type.ts";
-import {vec3, vec3_bitpack256v} from "@cl/vec3.ts";
-import {element_empty, element_stone, ELEMENT_TYPE} from "./types.ts";
+import {vec3} from "@cl/vec3.ts";
+import {element_empty, ELEMENT_TYPE} from "./types.ts";
 import {element_copy, ELEMENT_STATE, element_t} from "./element.ts";
 
 export class grid_t {
@@ -33,6 +33,10 @@ export function grid_new(width: number, height: number): grid_t {
 
     return grid;
 }
+
+export function grid_pos(grid: grid_t, curr: number, x: number, y: number): element_t {
+    return grid.elements[(curr + x + grid.width * y + grid.size) % grid.size];
+};
 
 export function grid_curr(grid: grid_t, curr: number): element_t {
     return grid.elements[curr];
@@ -176,7 +180,7 @@ export function grid_update(grid: grid_t): void {
                 }
             }
 
-            if (!(frames % 5 === 0)) {
+            if (!(frames % 4 === 0)) {
                 return;
             }
 
@@ -190,22 +194,31 @@ export function grid_update(grid: grid_t): void {
             }
 
             if (curr.state === ELEMENT_STATE.GAS) {
-                if (up.state === ELEMENT_STATE.VOID) {
-                    grid_swap(grid, curr, up);
-                } else if (left_up.state === ELEMENT_STATE.VOID) {
-                    grid_swap(grid, curr, left_up);
-                } else if (right_up.state === ELEMENT_STATE.VOID) {
-                    grid_swap(grid, curr, right_up);
-                } else if ((up.density < curr.density) && up.gravity_flag) {
-                    grid_swap(grid, curr, up);
-                } else if (left.state === ELEMENT_STATE.VOID) {
-                    grid_swap(grid, curr, left);
-                } else if (right.state === ELEMENT_STATE.VOID) {
-                    grid_swap(grid, curr, right);
-                } else if ((left.density < curr.density) && left.gravity_flag && left.state === ELEMENT_STATE.GAS) {
-                    grid_swap(grid, curr, left);
-                } else if ((right.density < curr.density) && right.gravity_flag && right.state === ELEMENT_STATE.GAS) {
-                    grid_swap(grid, curr, right);
+                const options = [];
+
+                // Prioritize upward movement
+                if (up.state === ELEMENT_STATE.VOID) options.push(up);
+                if (left_up.state === ELEMENT_STATE.VOID) options.push(left_up);
+                if (right_up.state === ELEMENT_STATE.VOID) options.push(right_up);
+                if ((up.density < curr.density) && up.gravity_flag) options.push(up);
+
+                if (left.state === ELEMENT_STATE.VOID) options.push(left);
+                if (right.state === ELEMENT_STATE.VOID) options.push(right);
+                if ((left.density < curr.density) && left.gravity_flag && left.state === ELEMENT_STATE.GAS) options.push(left);
+                if ((right.density < curr.density) && right.gravity_flag && right.state === ELEMENT_STATE.GAS) options.push(right);
+
+                if (Math.random() < 0.05 && down.state === ELEMENT_STATE.VOID) options.push(down);
+
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                }
+
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i] !== null) {
+                        grid_swap(grid, curr, options[i]);
+                        break;
+                    }
                 }
             }
         }

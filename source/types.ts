@@ -141,7 +141,7 @@ export function element_fire(id: number): element_t {
     element.state = ELEMENT_STATE.GAS;
     element.gravity_flag = true;
     element.density = 4;
-    element.lifetime = 200;
+    element.lifetime = 400;
 
     return element;
 }
