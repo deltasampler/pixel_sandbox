@@ -1,7 +1,7 @@
 import {clamp, index2, rand_in} from "@cl/math";
 import {vec3_t} from "@cl/type.ts";
-import {vec3} from "@cl/vec3.ts";
-import {element_empty, ELEMENT_TYPE} from "./types.ts";
+import {vec3, vec3_bitpack256v} from "@cl/vec3.ts";
+import {element_color, element_empty, ELEMENT_TYPE} from "./types.ts";
 import {element_copy, ELEMENT_STATE, element_t} from "./element.ts";
 
 export class grid_t {
@@ -172,6 +172,7 @@ export function grid_update(grid: grid_t): void {
 
                 if ((rand.type === ELEMENT_TYPE.WOOD || rand.type === ELEMENT_TYPE.OIL) && Math.random() > 0.5) {
                     element_copy(rand, curr);
+                    rand.color = vec3_bitpack256v(vary_color(element_color(rand.type), 16));
                     rand.lifetime = 200;
                 }
 
@@ -253,6 +254,10 @@ export function grid_paint(grid: grid_t, preset: element_t, cx: number, cy: numb
         }
 
         element_copy(element, preset);
+
+        if (element.type !== ELEMENT_TYPE.EMPTY) {
+            element.color = vec3_bitpack256v(vary_color(element_color(element.type), 16));
+        }
     } else {
         const radius = Math.floor(size / 2.0);
 
@@ -272,6 +277,10 @@ export function grid_paint(grid: grid_t, preset: element_t, cx: number, cy: numb
                     }
 
                     element_copy(element, preset);
+
+                    if (element.type !== ELEMENT_TYPE.EMPTY) {
+                        element.color = vec3_bitpack256v(vary_color(element_color(element.type), 16));
+                    }
                 }
             }
         }

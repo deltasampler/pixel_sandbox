@@ -2,7 +2,7 @@ import {gl_init, gl_link_program} from "@engine/gl.ts";
 import {io_init, io_kb_key_down, io_m_button_down, io_m_button_up, io_m_move, io_m_wheel_scroll, kb_event_t, m_event_t, m_wheel_event_t} from "@engine/io.ts";
 import {vec2, vec2_set} from "@cl/vec2.ts";
 import {clamp} from "@cl/math";
-import {UT, get_enum_keys, get_enum_values, gs_object, gui_bool, gui_button, gui_canvas, gui_collapsing_header, gui_reload_component, gui_render, gui_select, gui_slider_number, gui_update, gui_window, gui_window_grid, gui_window_layout, unit} from "@gui/gui.ts";
+import {UT, get_enum_keys, get_enum_values, gs_object, gui_bool, gui_button, gui_canvas, gui_collapsing_header, gui_radio_group, gui_reload_component, gui_render, gui_slider_number, gui_update, gui_window, gui_window_grid, gui_window_layout, unit} from "@gui/gui.ts";
 import {grid_clear, grid_color, grid_new, grid_paint, grid_update} from "./grid.ts";
 import { element_air, element_dense_sand, element_empty, element_fire, element_oil, element_sand, element_stone, ELEMENT_TYPE, element_water, element_wood } from "./types.ts";
 
@@ -181,11 +181,13 @@ loop();
 
 const general_ch = gui_collapsing_header(left, "General");
 
-gui_select(general_ch, "Element", gs_object(config, "element"), get_enum_keys(ELEMENT_TYPE), get_enum_values(ELEMENT_TYPE));
 gui_slider_number(general_ch, "Brush Size", gs_object(config, "size"), 1, 1, 32);
 gui_bool(general_ch, "Is Paused", gs_object(config, "is_paused"));
 gui_button(general_ch, "Reset", function() {
     grid_clear(grid, element_empty(0));
 });
+
+const elements_ch = gui_collapsing_header(left, "Elements");
+gui_radio_group(elements_ch, "Element", gs_object(config, "element"), get_enum_keys(ELEMENT_TYPE), get_enum_values(ELEMENT_TYPE));
 
 gui_reload_component(left);
