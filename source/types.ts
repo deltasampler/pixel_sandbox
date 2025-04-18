@@ -1,5 +1,5 @@
 import {ELEMENT_STATE, element_t} from "./element.ts";
-import {vec3, vec3_bitpack256v} from "@cl/vec3.ts";
+import {vec3, vec3_bitpack256v} from "@cl/math/vec3.ts";
 
 export enum ELEMENT_TYPE {
     EMPTY,

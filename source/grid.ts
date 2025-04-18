@@ -1,6 +1,5 @@
-import {clamp, index2, rand_in} from "@cl/math";
-import {vec3_t} from "@cl/type.ts";
-import {vec3, vec3_bitpack256v} from "@cl/vec3.ts";
+import {clamp, index2, rand_in} from "@cl/math/math.ts";
+import {vec3, vec3_bitpack256v, vec3_t} from "@cl/math/vec3.ts";
 import {element_color, element_empty, ELEMENT_TYPE} from "./types.ts";
 import {element_copy, ELEMENT_STATE, element_t} from "./element.ts";
 
@@ -195,7 +194,7 @@ export function grid_update(grid: grid_t): void {
             }
 
             if (curr.state === ELEMENT_STATE.GAS) {
-                const options = [];
+                const options: element_t[] = [];
 
                 // Prioritize upward movement
                 if (up.state === ELEMENT_STATE.VOID) options.push(up);

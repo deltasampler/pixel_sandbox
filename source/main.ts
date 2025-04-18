@@ -1,7 +1,7 @@
 import {gl_init, gl_link_program} from "@engine/gl.ts";
 import {io_init, io_kb_key_down, io_m_button_down, io_m_button_up, io_m_move, io_m_wheel_scroll, kb_event_t, m_event_t, m_wheel_event_t} from "@engine/io.ts";
-import {vec2, vec2_set} from "@cl/vec2.ts";
-import {clamp} from "@cl/math";
+import {vec2, vec2_set} from "@cl/math/vec2.ts";
+import {clamp} from "@cl/math/math.ts";
 import {UT, get_enum_keys, get_enum_values, gs_object, gui_bool, gui_button, gui_canvas, gui_collapsing_header, gui_radio_group, gui_reload_component, gui_render, gui_slider_number, gui_update, gui_window, gui_window_grid, gui_window_layout, unit} from "@gui/gui.ts";
 import {grid_clear, grid_color, grid_new, grid_paint, grid_update} from "./grid.ts";
 import { element_air, element_dense_sand, element_empty, element_fire, element_oil, element_sand, element_stone, ELEMENT_TYPE, element_water, element_wood } from "./types.ts";
