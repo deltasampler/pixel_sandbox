@@ -1,5 +1,7 @@
-import {clamp, index2, rand_in} from "@cl/math/math.ts";
-import {vec3, vec3_bitpack256v, vec3_t} from "@cl/math/vec3.ts";
+import {clamp, index2} from "@cl/math/math.ts";
+import {rand_in} from "@cl/math/rand.ts";
+import {vec3, vec3_t} from "@cl/math/vec3.ts";
+import {vec3_bitpack256v} from "@cl/math/vec3_color.ts"
 import {element_color, element_empty, ELEMENT_TYPE} from "./types.ts";
 import {element_copy, ELEMENT_STATE, element_t} from "./element.ts";
 
